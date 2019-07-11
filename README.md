@@ -1,13 +1,8 @@
-Important
-===========
-
-⛔️ This project is no longer maintained ⛔️ 
-
-We urge you to look for a replacement.
-
-
 Description
 ============
+
+This fork applies some fixes/updates so that it works with recent versions of ReactPHP's Socket library 
+and Événement.
 
 WebSocket Server and Client library for PHP. Works with the latest HyBi specifications, as well the older Hixie #76 specification used by older Chrome versions and some Flash fallback solutions.
 
@@ -36,11 +31,11 @@ The easiest way to set up PHPWS is by using it as Composer dependency. Add the f
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/Devristo/phpws"
+            "url": "https://github.com/tuaris/phpws"
         }
     ],
     "require": {
-        "devristo/phpws": "dev-master"
+        "tuaris/phpws": "dev-master"
     }
 }
 ```

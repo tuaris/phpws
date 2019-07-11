@@ -87,12 +87,12 @@ class WebSocket extends EventEmitter
         $connector = new Connector($this->loop, $this->dns, $this->streamOptions);
 
         if ($isSecured) {
-            $connector = new \React\SocketClient\SecureConnector($connector, $this->loop);
+            $connector = new \React\Socket\SecureConnector($connector, $this->loop);
         }
 
         $deferred = new Deferred();
 
-        $connector->create($uri->getHost(), $uri->getPort() ?: $defaultPort)
+        $connector->connect(sprintf('%s:%s', $uri->getHost(), $uri->getPort() ?: $defaultPort))
             ->then(function (\React\Stream\DuplexStreamInterface $stream) use ($that, $uri, $deferred, $timeOut){
 
                 if($timeOut){
@@ -138,7 +138,7 @@ class WebSocket extends EventEmitter
                 });
 
                 $transport->on('message', function ($message) use ($that, $transport) {
-                    $that->emit("message", array("message" => $message));
+                    $that->emit("message", array($message));
                 });
 
                 $transport->initiateHandshake($uri);

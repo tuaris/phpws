@@ -2,21 +2,29 @@
 
 namespace Devristo\Phpws\Client;
 
-use React\SocketClient\Connector as BaseConnector;
 use React\EventLoop\LoopInterface;
 use React\Dns\Resolver\Resolver;
 use React\Promise\When;
 
-class Connector extends BaseConnector
+class Connector implements \React\Socket\ConnectorInterface
 {
+    /**
+     *
+     * @var \React\Socket\Connector
+     */
+    private $connector;
     protected $contextOptions = array();
 
     public function __construct(LoopInterface $loop, Resolver $resolver, array $contextOptions = null)
     {
-        parent::__construct($loop, $resolver);
+        $this->connector = new \React\Socket\Connector($loop, ['dns' => $resolver]);
 
-        $contextOptions = null === $contextOptions ? array() : $contextOptions;
+	$contextOptions = null === $contextOptions ? array() : $contextOptions;
         $this->contextOptions = $contextOptions;
+    }
+
+    public function create($host, $port) {
+	return $this->connector->connect(sprintf('%s:%s', $host, $port));
     }
 
     public function createSocketForAddress($address, $port, $hostName = null)
@@ -51,4 +59,9 @@ class Connector extends BaseConnector
             ->then(array($this, 'checkConnectedSocket'))
             ->then(array($this, 'handleConnectedSocket'));
     }
+
+    public function connect($uri): \React\Promise\PromiseInterface {
+	return $this->connector->connect($uri);
+    }
+
 }
