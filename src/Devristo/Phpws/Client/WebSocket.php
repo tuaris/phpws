@@ -189,6 +189,15 @@ class WebSocket extends EventEmitter
                 $loop->cancelTimer($closeTimer);
         });
     }
+    
+	public function updateURL($url) 
+	{
+		$parts = parse_url($url);
+		$this->url = $url;
+		if (in_array($parts['scheme'], array('ws', 'wss')) === false) {
+			throw new WebSocketInvalidUrlScheme();
+		}
+	}
 
     public function getState()
     {
